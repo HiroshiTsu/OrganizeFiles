@@ -57,54 +57,8 @@ int main() {
 					strLeft.append(strSub);
 					strSub = strLeft.substr(strLeft.length() - 2, 2);
 					strFn = strFn.substr(0, intLocA + 1).append(strSub).append(strFn.substr(intLocB, strFn.length() - intLocB));
-					_wrename(p.filename().wstring().c_str(), strFn.c_str());
 				}
-				wstring strDirName = trim(strFn.substr(0, intLocA));
-				struct _stat64 fileInfo;
-
-				//struct stat info;
-
-				//if (stat(pathname, &info) != 0)
-				//	printf("cannot access %s\n", pathname);
-				//else if (info.st_mode & S_IFDIR)  // S_ISDIR() doesn't exist on my windows 
-				//	printf("%s is a directory\n", pathname);
-				//else
-				//	printf("%s is no directory\n", pathname);
-
-				if ((_wstat64(strDirName.c_str(), &fileInfo) != 0) || (fileInfo.st_mode & S_IFDIR))
-				{
-					sys::create_directory(strDirName.c_str());
-					sys::permissions(strDirName.c_str(), sys::perms::remove_perms | sys::perms::others_all);
-				}
-
-				wstring strFullName = strDirName.append(L"\\").append(strFn.c_str());
-				while (1)
-				{
-					if ((_wstat64(strFullName.c_str(), &fileInfo) == 0)) {
-						size_t  intLocC = strFullName.find_last_of(L".");
-						if (intLocC == -1)
-						{
-							intLocC = strFullName.length();
-						}
-						wstring strFullName2 = strFullName.substr(0, intLocC ).append(L"G");
-					    wstring strFullName3 = strFullName2.append(strFullName.substr(intLocC, strFullName.length() - intLocC));
-						strFullName = strFullName3;
-					}
-					else
-					{
-						break;
-					}
-				}
-				_wrename(strFn.c_str(), strFullName.c_str());
-
-
-			}
-
-			struct _stat64 fileInfo;
-
-			if (_wstat64(strFn.c_str(), &fileInfo) != 0) {  // Use stat( ) to get the info
-				std::cerr << "Error: " << strerror(errno) << '\n';
-				return(EXIT_FAILURE);
+				_wrename(p.filename().wstring().c_str(), strFn.c_str());
 			}
 
 			wcout << "file: " << strFn << endl;
