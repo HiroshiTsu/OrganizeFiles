@@ -61,6 +61,13 @@ int main() {
 				_wrename(p.filename().wstring().c_str(), strFn.c_str());
 			}
 
+			struct _stat64 fileInfo;
+
+			if (_wstat64(strFn.c_str(), &fileInfo) != 0) {  // Use stat( ) to get the info
+				std::cerr << "Error: " << strerror(errno) << '\n';
+				return(EXIT_FAILURE);
+			}
+
 			wcout << "file: " << strFn << endl;
 
 			wcout << "Size          : " <<
